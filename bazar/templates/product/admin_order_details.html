@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-breadcrumb mb-25">
+    <h2>Order Details</h2>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="panel">
+            <div class="panel-header">
+                <h5>Details on Table</h5>
+                <div class="btn-box d-flex gap-2">
+                    <div id="tableSearch"></div>
+                    <button class="btn btn-sm btn-icon btn-outline-primary" title="Download Excel" id="downloadExcel"><i class="fa fa-file" aria-hidden="true"></i></button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-dashed table-hover digi-dataTable all-product-table table-striped" id="allProductTable">
+                    <thead>
+                        <tr>
+                          <th>User</th>
+                          <th>Product</th>
+                          <th>Quantity</th>
+                          <th>Price</th>
+                          <th>Total Amount</th>
+                          <th>Agent</th>
+                          <th>Delivery Method</th>
+                          <th>Delivery Status</th>
+                          <th>Payment Method</th>
+                          <th>Account</th>
+                          <th>Transaction ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for checkout_form in checkout_forms %}
+                        {% for checkout_item in checkout_form.checkout_items.all %}
+                        <tr>
+                            <td>{{ checkout_form.user.username }}</td>
+                            <td>{{ checkout_item.product.name }}</td>
+                            <td>{{ checkout_item.quantity }}</td>
+                            <td>{{ checkout_item.unit_price }}</td>
+                            <td>{{ checkout_form.total_amount }}</td>
+                            {% for delivery_form in checkout_form.checkout_delivery.all %}
+                                <td>{{ delivery_form.agent }}</td>
+                                <td>{{ delivery_form.delivery_method }}</td>
+                                <td>{{ delivery_form.delivery_status }}</td>
+                            {% empty %}
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            {% endfor %}
+                            {% for payment_method in checkout_form.checkout_payment.all %}
+                                <td>{{ payment_method.method }}</td>
+                                <td>{{ payment_method.account }}</td>
+                                <td>{{ payment_method.transaction_id }}</td>
+                            {% empty %}
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            {% endfor %} 
+                        </tr>
+                        {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="table-bottom-control"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

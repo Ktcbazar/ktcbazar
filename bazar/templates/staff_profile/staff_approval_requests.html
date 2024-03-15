@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-breadcrumb mb-25">
+    <h2>Staff Approval List</h2>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="panel">
+            <div class="panel-header">
+                <h5>Request For Approval</h5>
+                <div class="btn-box d-flex gap-2">
+                    <div id="tableSearch"></div>
+                    <button class="btn btn-sm btn-icon btn-outline-primary" title="Download Excel" id="downloadExcel"><i class="fa fa-file" aria-hidden="true"></i></button>
+                    
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-dashed table-hover digi-dataTable all-product-table table-striped" id="allProductTable">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>User Type</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for profile in pending_profiles %}
+                        <tr>
+                            <td>{{ profile.user.username }}</td>
+                            <td>{{ profile.user.email }}</td>
+                            <td>{{ profile.user.user_type }}</td>
+                            <td>
+                                <form method="post" action="{% url 'approve_staff_profile' profile.user.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" name="action" value="approve" class="btn btn-sm btn-success">
+                                        <i class="bi bi-check-circle-fill"></i> 
+                                    </button>
+                                    <button type="submit" name="action" value="reject" class="btn btn-sm btn-danger">
+                                        <i class="bi bi-x-circle-fill"></i> 
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="table-bottom-control"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

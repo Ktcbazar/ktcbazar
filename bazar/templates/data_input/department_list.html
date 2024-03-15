@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-breadcrumb mb-25">
+    <h2>All Department List</h2>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="panel">
+            <div class="panel-header">
+                <h5>Details on Table</h5>
+                <div class="btn-box d-flex gap-2">
+                    <div id="tableSearch"></div>
+                    <button class="btn btn-sm btn-icon btn-outline-primary" title="Download Excel" id="downloadExcel"><i class="fa fa-file" aria-hidden="true"></i></button>
+                    <div class="btn-box">
+                        <a href="{% url 'create_department' %}" class="btn btn-sm btn-primary"><i class="fa-light fa-plus"></i> Add New</a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-dashed table-hover digi-dataTable all-product-table table-striped" id="allProductTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for department in departments %}
+                        <tr>
+                            <td>{{ department.name }}</td>
+                            <td>{{ department.description }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="table-bottom-control"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

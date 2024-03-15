@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-breadcrumb mb-25">
+    <h2>Withdrawal Approval List</h2>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="panel">
+            <div class="panel-header">
+                <h5>Requests For Approval</h5>
+                <div class="btn-box d-flex gap-2">
+                    <div id="tableSearch"></div>
+                    <button class="btn btn-sm btn-icon btn-outline-primary" title="Download Excel" id="downloadExcel">
+                        <i class="fa fa-file" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-dashed table-hover digi-dataTable all-product-table table-striped" id="allProductTable">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Method</th>
+                            <th>Account</th>
+                            <th>Number</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for withdrawal in pending_withdrawals %}
+                        <tr>
+                            <td>{{ withdrawal.user.username }}</td>
+                            <td>{{ withdrawal.method }}</td>
+                            <td>{{ withdrawal.account }}</td>
+                            <td>{{ withdrawal.number }}</td>
+                            <td>{{ withdrawal.amount }}</td>
+                            <td>{{ withdrawal.status }}</td>
+                            <td>
+                                <form method="post" action="{% url 'approve_withdrawal' withdrawal.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" name="action" value="approve" class="btn btn-sm btn-success">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                    </button>
+                                    <button type="submit" name="action" value="reject" class="btn btn-sm btn-danger">
+                                        <i class="bi bi-x-circle-fill"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="table-bottom-control"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-breadcrumb mb-25">
+    <h2>Product List</h2>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="panel">
+            <div class="panel-header">
+                <h5>Details on Table</h5>
+                <div class="btn-box d-flex gap-2">
+                    <div id="tableSearch"></div>
+                    <button class="btn btn-sm btn-icon btn-outline-primary" title="Download Excel" id="downloadExcel"><i class="fa fa-file" aria-hidden="true"></i></button>
+                    <div class="btn-box">
+                      <a href="{% url 'create_product' %}" class="btn btn-sm btn-primary"><i class="fa-light fa-plus"></i>Add New</a>
+                  </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-dashed table-hover digi-dataTable all-product-table table-striped" id="allProductTable">
+                    <thead>
+                        <tr>
+                          <th>Image</th>
+                          <th>Category</th>
+                          <th>Supplier</th>
+                          <th>Name</th>
+                          <th>Price</th>
+                          <th>Quantity</th>
+                          <th>Size</th>
+                          <th>Weight</th>
+                          <th>Color</th>
+                          <th>Available</th>
+                          <th>Low Stock Threshold</th>
+                          <th>Featured</th>
+                          <th>Arrival</th>
+                          <th>Best Sale</th>
+                          <th>Special Offer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      {% for product in products %}
+                      <tr>
+                          <td><img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 100px;"></td>
+                          <td>{{ product.category }}</td>
+                          <td>{{ product.supplier }}</td>
+                          <td>{{ product.name }}</td>
+                          <td>{{ product.price }}</td>
+                          <td>{{ product.quantity }}</td>
+                          <td>{{ product.size }}</td>
+                          <td>{{ product.weight }}</td>
+                          <td>{{ product.color }}</td>
+                          <td>{{ product.is_available }}</td>
+                          <td>{{ product.low_stock_threshold }}</td>
+                          <td>{{ product.is_featured }}</td>
+                          <td>{{ product.is_arrival }}</td>
+                          <td>{{ product.is_best_sale }}</td>
+                          <td>{{ product.is_special_offer }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                </table>
+                <div class="table-bottom-control"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,604 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-menu="vertical" data-nav-size="nav-default">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales AI</title>
+    
+    <link rel="shortcut icon" href="favicon.png">
+    <link rel="stylesheet" href="{% static 'assets/vendor/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/css/OverlayScrollbars.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/css/jquery.dataTables.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/css/daterangepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/tree.css' %}">
+    <link rel="stylesheet" id="primaryColor" href="{% static 'assets/css/blue-color.css' %}">
+    <link rel="stylesheet" id="rtlStyle" href="#">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+<body class="body-padding body-p-top light-theme">
+    <!-- header start -->
+    <div class="header">
+        <div class="row g-0 align-items-center">
+            <div class="col-xxl-6 col-xl-5 col-4 d-flex align-items-center gap-20">
+                <div class="main-logo d-lg-block d-none">
+                    <div class="logo-big">
+                        <img src="{% static 'forntend/images/testlogo.png' %}" alt="Logo" style="height: 40px; width: 120px;">
+                    </div>
+                    <div class="logo-small">
+                        <a href="index.html">
+                            <img src="{% static 'forntend/images/testlogo.png' %}" alt="Logo">
+                        </a>
+                    </div>
+                </div>
+                <div class="nav-close-btn">
+                    <button id="navClose"><i class="fa fa-align-left" aria-hidden="true"></i></button>
+                </div>
+            </div>
+            <div class="col-4 d-lg-none">
+                <div class="mobile-logo">
+                    <a href="#">
+                        <img src="{% static 'forntend/images/testlogo.png' %}" alt="Logo">
+                    </a>
+                </div>
+            </div>
+            <div class="col-xxl-6 col-xl-7 col-lg-8 col-4">
+                <div class="header-right-btns d-flex justify-content-end align-items-center">
+                    
+                    <div class="header-btn-box profile-btn-box">
+                        <button class="profile-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                            {% if user.user_type == 'customer' %}
+                                <img src="{{ user.customer_profile.profile_image.url }}" alt="Customer Avatar">
+                            {% elif user.user_type == 'agent' %}
+                                <img src="{{ user.agent_profile.profile_image.url }}" alt="Agent Avatar">
+                            {% elif user.user_type == 'staff' %}
+                                <img src="{{ user.staff_profile.profile_image.url }}" alt="Staff Avatar">
+                            {% elif user.user_type == 'employee' %}
+                                <img src="{{ user.employee_profile.profile_image.url }}" alt="Employee Avatar">
+                            {% endif %}
+                        </button>
+                        <ul class="dropdown-menu profile-dropdown-menu">
+                            <li>
+                                <div class="dropdown-txt text-center">
+                                    <p class="mb-0">{{ user.username }}</p>
+                                    <span class="d-block">{{ user.user_type }}</span>
+                                    <span class="d-block">{{ user.email }}</span>
+                                </div>
+                            </li>
+                            {% if user.user_type == 'staff' %}
+                                <li><a class="dropdown-item" href="{% url 'staff_profile_list' %}"><span class="dropdown-icon"><i class="fa fa-user" aria-hidden="true"></i></span> Profile</a></li>
+                            {% elif user.user_type == 'agent' %}
+                                <li><a class="dropdown-item" href="{% url 'agent_profile_list' %}"><span class="dropdown-icon"><i class="fa fa-user" aria-hidden="true"></i></span> Profile</a></li>
+                            {% elif user.user_type == 'customer' %}
+                                <li><a class="dropdown-item" href="{% url 'customer_profile_list' %}"><span class="dropdown-icon"><i class="fa fa-user" aria-hidden="true"></i></span> Profile</a></li>
+                            {% elif user.user_type == 'employee' %}
+                                <li><a class="dropdown-item" href="{% url 'employee_profile_list' %}"><span class="dropdown-icon"><i class="fa fa-user" aria-hidden="true"></i></span> Profile</a></li>
+                            {% endif %}
+                            <li><hr class="dropdown-divider"></li> 
+                            <li><a class="dropdown-item" href="{% url 'change_password' %}"><span class="dropdown-icon"><i class="fa fa-unlock-alt" aria-hidden="true"></i></span>Change Password</a></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}"><span class="dropdown-icon"><i class="fa fa-sign-out" aria-hidden="true"></i></span> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header end -->
+
+    <!-- main sidebar start -->
+    <div class="main-sidebar">
+        <div class="main-menu">
+            <ul class="sidebar-menu scrollable">
+                
+                <li class="sidebar-item open">
+                    <a role="button" class="sidebar-link-group-title has-sub">Profile</a>
+                    <ul class="sidebar-link-group">
+                        {% if not request.user.staff_profile.is_updated and request.user.user_type == 'staff' %}
+                            <li class="sidebar-dropdown-item">
+                                <a href="{% url 'create_staff_profile' %}" class="sidebar-link active"><span class="nav-icon"><i class="fa fa-user"></i></span> <span class="sidebar-txt">Create Profile</span></a>
+                            </li>
+                        {% elif not request.user.agent_profile.is_updated and request.user.user_type == 'agent' %}
+                            <li class="sidebar-dropdown-item">
+                                <a href="{% url 'create_agent_profile' %}" class="sidebar-link active"><span class="nav-icon"><i class="fa fa-user"></i></span> <span class="sidebar-txt">Create Profile</span></a>
+                            </li>
+                        {% elif not request.user.customer_profile.is_updated and request.user.user_type == 'customer' %}
+                            <li class="sidebar-dropdown-item">
+                                <a href="{% url 'create_customer_profile' %}" class="sidebar-link active"><span class="nav-icon"><i class="fa fa-user"></i></span> <span class="sidebar-txt">Create Profile</span></a>
+                            </li>
+                        {% elif not request.user.employee_profile.is_updated and request.user.user_type == 'employee' %}
+                            <li class="sidebar-dropdown-item">
+                                <a href="{% url 'create_employee_profile' %}" class="sidebar-link active"><span class="nav-icon"><i class="fa fa-user"></i></span> <span class="sidebar-txt">Create Profile</span></a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </li>
+
+                {% if request.user.user_type == 'staff' %}
+                <li class="sidebar-item open">
+                    <a role="button" class="sidebar-link-group-title has-sub">Dashboard</a>
+                    <ul class="sidebar-link-group">
+                        
+                        {% if request.user.staff_profile.is_updated %}
+                            {% if not request.user.staff_profile.is_approved %}
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'waiting_for_approval' %}" class="sidebar-link active"><span class="nav-icon"><i class="fa-solid fa-clock-rotate-left"></i></span> <span class="sidebar-txt">Waiting for Approval</span></a>
+                                </li>
+                            {% else %}
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'admin_dashboard' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-user-secret"></i></i></span> <span class="sidebar-txt">Admin Dashboard</span></a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    </ul>
+                </li>
+                <li class="sidebar-item open">
+                    <a role="button" class="sidebar-link-group-title has-sub">Approval</a>
+                    <ul class="sidebar-link-group">
+                            {% if not request.user.staff_profile.is_approved %}
+                                
+                            {% else %}
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'staff_approval_requests' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-person-circle-check"></i></span> <span class="sidebar-txt">Staff Approval</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'employee_approval_requests' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-person-circle-check"></i></span> <span class="sidebar-txt">Employee Approval</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'delivery_approval_requests' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-check"></i></span> <span class="sidebar-txt">Order Approval</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'withdrawal_approval_requests' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-money-bill-transfer"></i></span> <span class="sidebar-txt">Withdrawal</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'agent_withdrawal_requests' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-money-bill-transfer"></i></span> <span class="sidebar-txt">Agent Withdrawal</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'shipped_approval_requests' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-truck"></i></span> <span class="sidebar-txt">Delivery Status</span></a>
+                                </li>
+                                
+                            {% endif %}
+                    </ul>
+                </li>
+                <li class="sidebar-item open">
+                    <a role="button" class="sidebar-link-group-title has-sub">User List</a>
+                    <ul class="sidebar-link-group">
+                            {% if not request.user.staff_profile.is_approved %}
+                                
+                            {% else %}
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'admin_staff_profile_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-id-card"></i></span> <span class="sidebar-txt">Staff List</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'admin_employee_profile_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-id-card"></i></span> <span class="sidebar-txt">Employee List</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'admin_agent_profile_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-id-card"></i></span> <span class="sidebar-txt">Agent List</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'admin_customer_profile_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-id-card"></i></span> <span class="sidebar-txt">Customer List</span></a>
+                                </li>
+                            {% endif %}
+                    </ul>
+                </li>
+
+
+                <li class="sidebar-item open">
+                    <a role="button" class="sidebar-link-group-title has-sub">Order</a>
+                    <ul class="sidebar-link-group">
+                        {% if not request.user.staff_profile.is_approved %}
+
+                            {% else %}
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'admin_order_details' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-file-invoice"></i></span> <span class="sidebar-txt">Order Details</span></a>
+                                </li>
+                            {% endif %}
+                    </ul>
+                </li>
+                <li class="sidebar-item open">
+                    <a role="button" class="sidebar-link-group-title has-sub">Comission</a>
+                    <ul class="sidebar-link-group">
+                        {% if not request.user.staff_profile.is_approved %}
+                        
+                            {% else %}
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'admin_agent_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Agent Comission</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'admin_sale_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Sales Comission</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'admin_sale_referral_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Referral Comission</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'admin_sale_rank_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Rank Comission</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'sale_company_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Company Comission</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'admin_earning_detail' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">User Earning</span></a>
+                                </li>
+                            {% endif %}
+                    </ul>
+                </li>
+                <li class="sidebar-item open">
+                    <a role="button" class="sidebar-link-group-title has-sub">Own Comission</a>
+                    <ul class="sidebar-link-group">
+                        {% if not request.user.staff_profile.is_approved %}
+                        
+                            {% else %}
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'sale_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Sales Comission</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'sale_referral_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Referral Comission</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'sale_rank_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Rank Comission</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'earning_detail' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Total Earning</span></a>
+                                </li>
+                            {% endif %}
+                            
+                    </ul>
+                </li>
+                <li class="sidebar-item open">
+                    <a role="button" class="sidebar-link-group-title has-sub">Transaction</a>
+                    <ul class="sidebar-link-group">
+                        {% if not request.user.staff_profile.is_approved %}
+                        
+                            {% else %}
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'send_money_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-share-from-square"></i></span> <span class="sidebar-txt">Send Money</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'admin_send_money_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-share-from-square"></i></span> <span class="sidebar-txt">User Send Money</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'withdrawal_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-money-bill-transfer"></i></span> <span class="sidebar-txt">Withdrwal</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'admin_withdrawal_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-money-bill-transfer"></i></span> <span class="sidebar-txt">User Withdrawal</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'admin_agent_withdrawal_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-money-bill-transfer"></i></span> <span class="sidebar-txt">Agent Withdrawal</span></a>
+                                </li>
+                            {% endif %}
+                    </ul>
+                </li>
+                {% endif %}
+                {% if request.user.user_type == 'employee' %}
+                <li class="sidebar-item open">
+                    <a role="button" class="sidebar-link-group-title has-sub">Dashboard</a>
+                    <ul class="sidebar-link-group">
+                        
+                        {% if request.user.employee_profile.is_updated %}
+                            {% if not request.user.employee_profile.is_approved %}
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'waiting_for_approval' %}" class="sidebar-link active"><span class="nav-icon"><i class="fa fa-user"></i></span> <span class="sidebar-txt">Waiting for Approval</span></a>
+                                </li>
+                            {% else %}
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'employee_dashboard' %}" class="sidebar-link"><span class="nav-icon"><i class="fa fa-user"></i></span> <span class="sidebar-txt">Employee Dashboard</span></a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    </ul>
+                </li>
+                <li class="sidebar-item open">
+                    <a role="button" class="sidebar-link-group-title has-sub">Data input</a>
+                    <ul class="sidebar-link-group">
+                            {% if not request.user.employee_profile.is_approved %}
+                                
+                            {% else %}
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'department_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-building"></i></span> <span class="sidebar-txt">Department List</span></a>
+                                </li>
+                            {% endif %}
+                    </ul>
+                </li>
+                <li class="sidebar-item open">
+                    <a role="button" class="sidebar-link-group-title has-sub">Inventory</a>
+                    <ul class="sidebar-link-group">
+                            {% if not request.user.employee_profile.is_approved %}
+                                
+                            {% else %}
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'supplier_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-boxes-packing"></i></span> <span class="sidebar-txt">Supplier List</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'create_parent_category' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-table-cells-large"></i></span> <span class="sidebar-txt">Add Parent Category</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'product_category_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-list"></i></span> <span class="sidebar-txt">Product Category List</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'product_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-brands fa-product-hunt"></i></span> <span class="sidebar-txt">Product List</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'company_stock_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-warehouse"></i></span> <span class="sidebar-txt">Stock List</span></a>
+                                </li>
+                            {% endif %}
+                    </ul>
+                </li>
+                <li class="sidebar-item open">
+                    <a role="button" class="sidebar-link-group-title has-sub">Order</a>
+                    <ul class="sidebar-link-group">
+                        {% if not request.user.employee_profile.is_approved %}
+                                
+                            {% else %}
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'admin_order_details' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-file-invoice"></i></span> <span class="sidebar-txt">Order Details</span></a>
+                                </li>
+                        {% endif %}
+                            
+                    </ul>
+                </li>
+                <li class="sidebar-item open">
+                    <a role="button" class="sidebar-link-group-title has-sub">Comission</a>
+                    <ul class="sidebar-link-group">
+                        {% if not request.user.employee_profile.is_approved %}
+                                
+                            {% else %}
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'admin_agent_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Agent Comission</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'admin_sale_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Sales Comission</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'admin_sale_referral_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Referral Comission</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'admin_sale_rank_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Rank Comission</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'sale_company_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Company Comission</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'admin_earning_detail' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">User Earning</span></a>
+                                </li>
+                        {% endif %}
+                            
+                    </ul>
+                </li>
+                <li class="sidebar-item open">
+                    <a role="button" class="sidebar-link-group-title has-sub">Own Comission</a>
+                    <ul class="sidebar-link-group">
+                        {% if not request.user.employee_profile.is_approved %}
+                                
+                            {% else %}
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'sale_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Sales Comission</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'sale_referral_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Referral Comission</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'sale_rank_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Rank Comission</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'earning_detail' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Total Earning</span></a>
+                                </li>
+                        {% endif %}
+                            
+                    </ul>
+                </li>
+                <li class="sidebar-item open">
+                    <a role="button" class="sidebar-link-group-title has-sub">Transaction</a>
+                    <ul class="sidebar-link-group">
+                        {% if not request.user.employee_profile.is_approved %}
+                                
+                            {% else %}
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'send_money_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-share-from-square"></i></span> <span class="sidebar-txt">Send Money List</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'admin_send_money_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-share-from-square"></i></span> <span class="sidebar-txt">All Send Money List</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'withdrawal_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-money-bill-transfer"></i></span> <span class="sidebar-txt">Withdrwal</span></a>
+                                </li>
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'admin_agent_withdrawal_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-money-bill-transfer"></i></span> <span class="sidebar-txt">Agent Withdrawal</span></a>
+                                </li>
+                        {% endif %}
+                            
+                    </ul>
+                </li>
+                <li class="sidebar-item open">
+                    <a role="button" class="sidebar-link-group-title has-sub">Transaction</a>
+                    <ul class="sidebar-link-group">
+                        {% if not request.user.employee_profile.is_approved %}
+                                
+                            {% else %}
+                                <li class="sidebar-dropdown-item">
+                                    <a href="{% url 'downline' user.id %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-share-from-square"></i></span> <span class="sidebar-txt">Tree View</span></a>
+                                </li>
+                        {% endif %}
+                    </ul>
+                </li>
+                {% endif %}
+                {% if request.user.user_type == 'agent' %}
+                    {% if request.user.agent_profile.is_updated %}
+                        <li class="sidebar-item open">
+                            <a role="button" class="sidebar-link-group-title has-sub">Dashboard</a>
+                            <ul class="sidebar-link-group">
+                                    <li class="sidebar-dropdown-item">
+                                        <a href="{% url 'agent_dashboard' %}" class="sidebar-link"><span class="nav-icon"><i class="fa fa-user"></i></span> <span class="sidebar-txt">Agent Dashboard</span></a>
+                                    </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item open">
+                            <a role="button" class="sidebar-link-group-title has-sub">Shop</a>
+                            <ul class="sidebar-link-group">
+                                    <li class="sidebar-dropdown-item">
+                                        <a href="{% url 'backend_shop' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-shop"></i></span> <span class="sidebar-txt">Shop</span></a>
+                                    </li>
+                                    <li class="sidebar-dropdown-item">
+                                        <a href="{% url 'cart' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-cart-shopping"></i></span> <span class="sidebar-txt">Cart</span></a>
+                                    </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item open">
+                            <a role="button" class="sidebar-link-group-title has-sub">Order</a>
+                            <ul class="sidebar-link-group">
+                                    <li class="sidebar-dropdown-item">
+                                        <a href="{% url 'order_details' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-file-invoice"></i></span> <span class="sidebar-txt">Order Details</span></a>
+                                    </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item open">
+                            <a role="button" class="sidebar-link-group-title has-sub">Comission</a>
+                            <ul class="sidebar-link-group">
+                                    <li class="sidebar-dropdown-item">
+                                        <a href="{% url 'agent_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Agent Comission</span></a>
+                                    </li>
+                                    <li class="sidebar-dropdown-item">
+                                        <a href="{% url 'sale_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Sales Comission</span></a>
+                                    </li>
+                                    <li class="sidebar-dropdown-item">
+                                        <a href="{% url 'sale_referral_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Referral Comission</span></a>
+                                    </li>
+                                    <li class="sidebar-dropdown-item">
+                                        <a href="{% url 'sale_rank_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Rank Comission</span></a>
+                                    </li>
+                                    <li class="sidebar-dropdown-item">
+                                        <a href="{% url 'earning_detail' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Total Earning</span></a>
+                                    </li>
+                                    
+                            </ul>
+                        </li>
+                        <li class="sidebar-item open">
+                            <a role="button" class="sidebar-link-group-title has-sub">Transaction</a>
+                            <ul class="sidebar-link-group">
+                                    <li class="sidebar-dropdown-item">
+                                        <a href="{% url 'send_money_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-share-from-square"></i></span> <span class="sidebar-txt">Send Money List</span></a>
+                                    </li>
+                                    <li class="sidebar-dropdown-item">
+                                        <a href="{% url 'withdrawal_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-money-bill-transfer"></i></span> <span class="sidebar-txt">Withdrwal</span></a>
+                                    </li>
+                                    <li class="sidebar-dropdown-item">
+                                        <a href="{% url 'agent_withdrawal_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-money-bill-transfer"></i></span> <span class="sidebar-txt">Comission Withdrawal</span></a>
+                                    </li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                
+                {% endif %}
+                {% if request.user.user_type == 'customer' %}
+                    {% if request.user.customer_profile.is_updated %}
+                        <li class="sidebar-item open">
+                            <a role="button" class="sidebar-link-group-title has-sub">Dashboard</a>
+                            <ul class="sidebar-link-group">
+                                    <li class="sidebar-dropdown-item">
+                                        <a href="{% url 'customer_dashboard' %}" class="sidebar-link"><span class="nav-icon"><i class="fa fa-user"></i></span> <span class="sidebar-txt">Customer Dashboard</span></a>
+                                    </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item open">
+                            <a role="button" class="sidebar-link-group-title has-sub">Shop</a>
+                            <ul class="sidebar-link-group">
+                                    <li class="sidebar-dropdown-item">
+                                        <a href="{% url 'backend_shop' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-shop"></i></span> <span class="sidebar-txt">Shop</span></a>
+                                    </li>
+                                    <li class="sidebar-dropdown-item">
+                                        <a href="{% url 'cart' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-cart-shopping"></i></span> <span class="sidebar-txt">Cart</span></a>
+                                    </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item open">
+                            <a role="button" class="sidebar-link-group-title has-sub">Order</a>
+                            <ul class="sidebar-link-group">
+                                    <li class="sidebar-dropdown-item">
+                                        <a href="{% url 'order_details' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-file-invoice"></i></span> <span class="sidebar-txt">Order Details</span></a>
+                                    </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item open">
+                            <a role="button" class="sidebar-link-group-title has-sub">Comission</a>
+                            <ul class="sidebar-link-group">
+                                    <li class="sidebar-dropdown-item">
+                                        <a href="{% url 'sale_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Sales Comission</span></a>
+                                    </li>
+                                    <li class="sidebar-dropdown-item">
+                                        <a href="{% url 'sale_referral_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Referral Comission</span></a>
+                                    </li>
+                                    <li class="sidebar-dropdown-item">
+                                        <a href="{% url 'sale_rank_commission_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Rank Comission</span></a>
+                                    </li>
+                                    <li class="sidebar-dropdown-item">
+                                        <a href="{% url 'earning_detail' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-bangladeshi-taka-sign"></i></span> <span class="sidebar-txt">Total Earning</span></a>
+                                    </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item open">
+                            <a role="button" class="sidebar-link-group-title has-sub">Transaction</a>
+                            <ul class="sidebar-link-group">
+                                    <li class="sidebar-dropdown-item">
+                                        <a href="{% url 'send_money_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-share-from-square"></i></span> <span class="sidebar-txt">Send Money List</span></a>
+                                    </li>
+                                    <li class="sidebar-dropdown-item">
+                                        <a href="{% url 'withdrawal_list' %}" class="sidebar-link"><span class="nav-icon"><i class="fa-solid fa-money-bill-transfer"></i></span> <span class="sidebar-txt">Withdrwal</span></a>
+                                    </li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                
+                {% endif %}
+
+                
+                
+                
+                <li class="help-center">
+                    <h3>Hi,There</h3>
+                    <p>Welcome To Tachnology</p>
+                    <a href="https://www.facebook.com/palpsoft" class="btn btn-sm btn-light">We're here</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- main sidebar end -->
+
+    
+
+
+    <!-- main content start -->
+    <div class="main-content">
+        
+        {% block content %}{% endblock %}
+        
+
+        <!-- footer start -->
+        <div class="footer">
+            <p>Copyright ©  <a href="https://www.pexels.com/photo/hand-holding-react-sticker-11035471/">All Rights Reserved By</a> <span>PalpSoft</span></p>
+        </div>
+        <!-- footer end -->
+    </div>
+    <!-- main content end -->
+
+
+
+    <script src="{% static 'assets/vendor/js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/jquery.overlayScrollbars.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/apexcharts.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/moment.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/daterangepicker.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/js/dashboard.js' %}"></script>
+    <script src="{% static 'assets/js/main.js' %}"></script>
+    <script src="{% static 'assets/js/order-list.js' %}"></script>
+    <script src="{% static 'assets/js/select2-init.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/html2canvas.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/jquery.table2excel.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/jquery.select2.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/pdfmake.min.js' %}"></script>
+</body>
+</html>

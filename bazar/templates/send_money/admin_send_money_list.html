@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-breadcrumb mb-25">
+    <h2>Send Moeny</h2>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="panel">
+            <div class="panel-header">
+                <h5>Details on Table</h5>
+                <div class="btn-box d-flex gap-2">
+                    <div id="tableSearch"></div>
+                    <button class="btn btn-sm btn-icon btn-outline-primary" title="Download Excel" id="downloadExcel"><i class="fa fa-file" aria-hidden="true"></i></button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-dashed table-hover digi-dataTable all-product-table table-striped" id="allProductTable">
+                    <thead>
+                        <tr>
+                            <th>Receiver</th>
+                            <th>Amount</th>
+                            <th>Note</th>
+                            <th>Date & Time</th>
+                            <th>Transaction ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in send_transactions %}
+                        <tr>
+                            <td>{{ transaction.receiver.username }}</td>
+                            <td>{{ transaction.amount }}</td>
+                            <td>{{ transaction.note|default:"N/A" }}</td>
+                            <td>{{ transaction.timestamp }}</td>
+                            <td>{{ transaction.transaction_id }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="table-bottom-control"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

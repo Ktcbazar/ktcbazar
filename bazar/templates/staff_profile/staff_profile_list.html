@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-breadcrumb mb-25">
+    <h2>Staff Profile</h2>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="panel">
+            <div class="panel-header">
+                <h5>Details on Table</h5>
+                <div class="btn-box d-flex gap-2">
+                    <div id="tableSearch"></div>
+                    <button class="btn btn-sm btn-icon btn-outline-primary" title="Download Excel" id="downloadExcel"><i class="fa fa-file" aria-hidden="true"></i></button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-dashed table-hover digi-dataTable all-product-table table-striped" id="allProductTable">
+                    <thead>
+                        <tr>
+                            <th>Profile Image</th>
+                            <th>Username</th>
+                            <th>Bio</th>
+                            <th>Phone Number</th>
+                            <th>Date of Birth</th>
+                            <th>Address</th>
+                            <th>District</th>
+                            <th>Zipcode</th>
+                            <th>Country</th>
+                            <th>NID Number</th>
+                            <th>Is Updated</th>
+                            <th>Is Approved</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for profile in profiles %}
+                        <tr>
+                            <td><img src="{{ profile.profile_image.url }}" alt="Profile Image" width="50" height="50"></td>
+                            <td>{{ profile.user.username }}</td>
+                            <td>{{ profile.bio }}</td>
+                            <td>{{ profile.phone_number }}</td>
+                            <td>{{ profile.date_of_birth }}</td>
+                            <td>{{ profile.address }}</td>
+                            <td>{{ profile.district }}</td>
+                            <td>{{ profile.zipcode }}</td>
+                            <td>{{ profile.country }}</td>
+                            <td>{{ profile.nid_number }}</td>
+                            <td>{{ profile.is_updated }}</td>
+                            <td>{{ profile.is_approved }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="table-bottom-control"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

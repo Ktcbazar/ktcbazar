@@ -1,0 +1,337 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Meta -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="keywords" content=" ">
+
+        <!-- SITE TITLE -->
+        <title>KTC Bazar</title>
+        <!-- Favicon Icon -->
+        <link rel="shortcut icon" type="image/x-icon" href="#">
+        <!-- Animation CSS -->
+        <link rel="stylesheet" href="{% static 'forntend/css/animate.css' %}">
+        <!-- Latest Bootstrap min CSS -->
+        <link rel="stylesheet" href="{% static 'forntend/bootstrap/css/bootstrap.min.css' %}">
+        <!-- Google Font -->
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900&display=swap" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap" rel="stylesheet"> 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-oAtWALR7F69WcVyzY1q7wTx5Ckd8Vz5FqpgQ3r4+oUmAzlF6tyqVUCpGz02L5aYm" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+        <!-- Icon Font CSS -->
+        <link rel="stylesheet" href="{% static 'forntend/css/all.min.css' %}">
+        <link rel="stylesheet" href="{% static 'forntend/css/ionicons.min.css' %}">
+        <link rel="stylesheet" href="{% static 'forntend/css/themify-icons.css' %}">
+        <link rel="stylesheet" href="{% static 'forntend/css/linearicons.css' %}">
+        <link rel="stylesheet" href="{% static 'forntend/css/flaticon.css' %}">
+        <link rel="stylesheet" href="{% static 'forntend/css/simple-line-icons.css' %}">
+        <!--- owl carousel CSS-->
+        <link rel="stylesheet" href="{% static 'forntend/owlcarousel/css/owl.carousel.min.css' %}">
+        <link rel="stylesheet" href="{% static 'forntend/owlcarousel/css/owl.theme.css' %}">
+        <link rel="stylesheet" href="{% static 'forntend/owlcarousel/css/owl.theme.default.min.css' %}">
+        <!-- Magnific Popup CSS -->
+        <link rel="stylesheet" href="{% static 'forntend/css/magnific-popup.css' %}">
+        <!-- Slick CSS -->
+        <link rel="stylesheet" href="{% static 'forntend/css/slick.css' %}">
+        <link rel="stylesheet" href="{% static 'forntend/css/slick-theme.css' %}">
+        <!-- Style CSS -->
+        <link rel="stylesheet" href="{% static 'forntend/css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'forntend/css/responsive.css' %}">
+
+    </head>
+
+<body>
+<!-- START HEADER -->
+<header class="header_wrap fixed-top header_with_topbar">
+	<div class="top-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                	<div class="d-flex align-items-center justify-content-center justify-content-md-start">
+                        <ul class="contact_detail text-center text-lg-start">
+                            <li><span class="material-icons-outlined">phone_iphone</span><span>+880-1308912839</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                	<div class="text-center text-md-end">
+                       	<ul class="header_list">
+                            <li><a href="{% url 'register' %}"><i class="ti-user"></i><span>Register</span></a></li>
+                            <li><a href="{% url 'login' %}"><i class="ti-user"></i><span>Login</span></a></li>
+						</ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom_header dark_skin main_menu_uppercase">
+    	<div class="container">
+            <nav class="navbar navbar-expand-lg"> 
+                <a class="navbar-brand" href="{% url 'home' %}">
+                    <img class="logo_dark" src="{% static 'forntend/images/testlogo.png' %}" alt="logo" style="height: 50px; width: 150px;">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-expanded="false"> 
+                    <span class="ion-android-menu"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+                    <ul class="navbar-nav">
+                        <li class="dropdown"><a data-bs-toggle="dropdown" class="nav-link dropdown-toggle" href="{% url 'home' %}">Home</a></li>
+                        <li><a class="nav-link nav_item" href="{% url 'shop' %}">Our Shop</a></li>
+                        <li><a class="nav-link nav_item" href="{% url 'how_we_work' %}">How we Work</a></li>
+                        <li><a class="nav-link nav_item" href="{% url 'about_us' %}">About Us</a></li> 
+                        <li><a class="nav-link nav_item" href="{% url 'contact_us' %}">Contact Us</a></li> 
+                    </ul>
+                </div>
+                
+            </nav>
+        </div>
+    </div>
+</header>
+<!-- END HEADER -->
+
+
+
+<!-- START MAIN CONTENT -->
+<div class="main_content">
+
+<!-- START SECTION SHOP -->
+<div class="section">
+	<div class="container">
+		<div class="row">
+            <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
+              <div class="product-image">
+                    <div class="product_img_box">
+                        <img id="product_img" src="{{ product.image.url }}" data-zoom-image="{{ product.image.url }}" alt="{{ product.name }}" />
+                    </div>
+                    {% comment %} <div id="pr_item_gallery" class="product_gallery_item slick_slider" data-slides-to-show="4" data-slides-to-scroll="1" data-infinite="false">
+                        <div class="item">
+                            <a href="#" class="product_gallery_item active" data-image="assets/images/product_img1.jpg" data-zoom-image="assets/images/product_zoom_img1.jpg">
+                                <img src="assets/images/product_small_img1.jpg" alt="product_small_img1" />
+                            </a>
+                        </div>
+                        <div class="item">
+                            <a href="#" class="product_gallery_item" data-image="assets/images/product_img1-2.jpg" data-zoom-image="assets/images/product_zoom_img2.jpg">
+                                <img src="assets/images/product_small_img2.jpg" alt="product_small_img2" />
+                            </a>
+                        </div>
+                        <div class="item">
+                            <a href="#" class="product_gallery_item" data-image="assets/images/product_img1-3.jpg" data-zoom-image="assets/images/product_zoom_img3.jpg">
+                                <img src="assets/images/product_small_img3.jpg" alt="product_small_img3" />
+                            </a>
+                        </div>
+                        <div class="item">
+                            <a href="#" class="product_gallery_item" data-image="assets/images/product_img1-4.jpg" data-zoom-image="assets/images/product_zoom_img4.jpg">
+                                <img src="assets/images/product_small_img4.jpg" alt="product_small_img4" />
+                            </a>
+                        </div>
+                    </div> {% endcomment %}
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="pr_detail">
+                    <div class="product_description">
+                        <h4 class="product_title">{{ product.name }}</a></h4>
+                        <h6 class="product_title">{{ product.category }}</a></h6>
+                        <div class="product_price">
+                            <span class="price">{{ product.price }}</span>
+                        </div>
+                        <div class="pr_desc">
+                            <p>{{ product.description }}</p>
+                        </div>
+                        <div class="product_sort_info">
+                            <ul>
+                                <li>Return Feacility</li>
+                                <li>Cash on Delivery available</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="cart_extra">
+                        <div class="cart_btn">
+                            <a href="{% url 'login' %}" class="btn btn-fill-out btn-addtocart">Log In To Buy</a>
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+            </div>
+        </div>        
+        <div class="row">
+        	<div class="col-12">
+            	<div class="small_divider"></div>
+            	<div class="divider"></div>
+                <div class="medium_divider"></div>
+            </div>
+        </div>
+        <div class="row">
+        	<div class="col-12">
+            	<div class="heading_s1">
+                	<h3>Releted Products</h3>
+                </div>
+            	<div class="releted_product_slider carousel_slider owl-carousel owl-theme" data-margin="20" data-responsive='{"0":{"items": "1"}, "481":{"items": "2"}, "768":{"items": "3"}, "1199":{"items": "4"}}'>
+                	{% for related_product in related_products %}
+                    <div class="item">
+                        <div class="product">
+                            <div class="product_img">
+                                <a href="{% url 'product_detail' related_product.pk %}">
+                                    <img src="{{ related_product.image.url }}" alt="{{ related_product.name }}">
+                                </a>
+                            </div>
+                            <div class="product_info">
+                                <h6 class="product_title"><a href="{% url 'product_detail' related_product.pk %}">{{ related_product.name }}</a></h6>
+                                <div class="product_price">
+                                    <span class="price">{{ related_product.price }}</span>
+                                </div>
+                                
+                                <div class="pr_desc">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus blandit massa enim. Nullam id varius nunc id varius nunc.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END SECTION SHOP -->
+
+<!-- START SECTION SUBSCRIBE NEWSLETTER -->
+<div class="section bg_default small_pt small_pb">
+	<div class="container">	
+    	<div class="row align-items-center">	
+            <div class="col-md-6">
+                <div class="heading_s1 mb-md-0 heading_light">
+                    <h3>Subscribe Our Newsletter</h3>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="newsletter_form">
+                    <form>
+                        <input type="text" required="" class="form-control rounded-0" placeholder="Enter Email Address">
+                        <button type="submit" class="btn btn-dark rounded-0" name="submit" value="Submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- START SECTION SUBSCRIBE NEWSLETTER -->
+
+</div>
+<!-- END MAIN CONTENT -->
+
+<!-- START FOOTER -->
+<footer class="footer_dark">
+	<div class="footer_top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                	<div class="widget">
+                        <div class="footer_logo">
+                            <a href="{% url 'home' %}"><img src="{% static 'forntend/images/testlogo.png' %}" style="height: 50px; width: 150px;" alt="logo"/></a>
+                        </div>
+                        <p>Here, we foster an environment where businesses come together to innovate, share ideas, and achieve mutual goals.</p>
+                    </div>
+        		</div>
+                <div class="col-lg-2 col-md-3 col-sm-6">
+                	<div class="widget">
+                        <h6 class="widget_title">You may need</h6>
+                        <ul class="widget_links">
+                            <li><a href="{% url 'become_marketer' %}">Marketer?</a></li>
+                            <li><a href="{% url 'privacy_policy' %}">Privacy Policy</a></li>
+                            <li><a href="{% url 'terms_of_use' %}">Terms of User</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-6">
+                	<div class="widget">
+                        <h6 class="widget_title">Category</h6>
+                        <ul class="widget_links">
+                            <li><a href="#">Men</a></li>
+                            <li><a href="#">Woman</a></li>
+                            <li><a href="#">Kids & Adult</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 col-sm-6">
+                	<div class="widget">
+                        <h6 class="widget_title">Information</h6>
+                        <ul class="widget_links">
+                            <li><a href="{% url 'notice_board' %}">Notic Board</a></li>
+                            <li><a href="{% url 'updates' %}">Updates</a></li>
+                            <li><a href="{% url 'updates' %}">Our Partners</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                	<div class="widget">
+                        <h6 class="widget_title">Kushtia Trading Corporation</h6>
+                        <ul class="contact_info contact_info_light">
+                            <li>
+                                <i class="ti-location-pin"></i>
+                                <p>123 Street, demo address, kustia sadar-7000, Banagladesh</p>
+                            </li>
+                            <li>
+                                <i class="ti-email"></i>
+                                <a href="mailto:info@sitename.com">info@ktcbazar.com</a>
+                            </li>
+                            <li>
+                                <i class="ti-mobile"></i>
+                                <p>+880-1308912839</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom_footer border-top-tran">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-md-0 text-center text-md-start">© 2024 <a href="https://www.facebook.com/palpsoft">PalpSoft</a> & <a href="https://bestwebcreator.com/">BestWebCreator</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- END FOOTER -->
+
+<a href="#" class="scrollup" style="display: none;"><span class="material-icons-outlined">expand_less</span></a> 
+
+<!-- Latest jQuery --> 
+<script src="{% static 'forntend/js/jquery-3.7.1.min.js' %}"></script>
+<!-- popper min js -->
+<script src="{% static 'forntend/js/popper.min.js' %}"></script>
+<!-- Latest compiled and minified Bootstrap --> 
+<script src="{% static 'forntend/bootstrap/js/bootstrap.min.js' %}"></script>
+<!-- owl-carousel min js  --> 
+<script src="{% static 'forntend/owlcarousel/js/owl.carousel.min.js' %}"></script>
+<!-- magnific-popup min js  --> 
+<script src="{% static 'forntend/js/magnific-popup.min.js' %}"></script>
+<!-- waypoints min js  --> 
+<script src="{% static 'forntend/js/waypoints.min.js' %}"></script>
+<!-- parallax js  --> 
+<script src="{% static 'forntend/js/parallax.js' %}"></script>
+<!-- countdown js  --> 
+<script src="{% static 'forntend/js/jquery.countdown.min.js' %}"></script>
+<!-- imagesloaded js --> 
+<script src="{% static 'forntend/js/imagesloaded.pkgd.min.js' %}"></script>
+<!-- isotope min js --> 
+<script src="{% static 'forntend/js/isotope.min.js' %}"></script>
+<!-- jquery.dd.min js -->
+<script src="{% static 'forntend/js/jquery.dd.min.js' %}"></script>
+<!-- slick js -->
+<script src="{% static 'forntend/js/slick.min.js' %}"></script>
+<!-- elevatezoom js -->
+<script src="{% static 'forntend/js/jquery.elevatezoom.js' %}"></script>
+<!-- scripts js --> 
+<script src="{% static 'forntend/js/scripts.js' %}"></script>
+
+</body>
+</html>

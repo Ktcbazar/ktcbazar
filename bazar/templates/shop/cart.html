@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-breadcrumb mb-25">
+    <h2>Cart</h2>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="panel">
+            <div class="panel-header">
+                <h5>Shopping Cart</h5>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart_items %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>{{ item.product.price }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.total_price }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div style="margin-top: 20px;">
+                  <p style="margin-bottom: 10px;">Total: {{ total }}</p>
+                  <div style="display: flex; justify-content: space-between;">
+                      <div>
+                          <a href="{% url 'checkout' %}" class="btn btn-primary" style="margin-right: 10px;">Proceed to Checkout</a>
+                      </div>
+                      <div>
+                          <form method="post" action="{% url 'reset_cart' %}">
+                              {% csrf_token %}
+                              <button type="submit" class="btn btn-danger">Reset Cart</button>
+                          </form>
+                      </div>
+                  </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

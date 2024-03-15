@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-breadcrumb mb-25">
+    <h2>Agent Commission List</h2>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="panel">
+            <div class="panel-header">
+                <h5>Details on Table</h5>
+                <div class="btn-box d-flex gap-2">
+                    <div id="tableSearch"></div>
+                    <button class="btn btn-sm btn-icon btn-outline-primary" title="Download Excel" id="downloadExcel"><i class="fa fa-file" aria-hidden="true"></i></button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-dashed table-hover digi-dataTable all-product-table table-striped" id="allProductTable">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Checkout Form</th>
+                            <th>Delivery Form</th>
+                            <th>Sales Amount</th>
+                            <th>Commission Percentage</th>
+                            <th>Payable Amount</th>
+                            <th>Total Amount</th>
+                            <th>Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for commission in agent_commissions %}
+                        <tr>
+                            <td>{{ commission.product.name }}</td>
+                            <td>{{ commission.checkout_form }}</td>
+                            <td>{{ commission.delivery_form }}</td>
+                            <td>{{ commission.sales_amount }}</td>
+                            <td>{{ commission.commission_percentage }}</td>
+                            <td>{{ commission.payable_amount }}</td>
+                            <td>{{ commission.total_amount }}</td>
+                            <td>{{ commission.created_at }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="8">No agent commissions found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="table-bottom-control"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

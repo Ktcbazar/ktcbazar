@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Downline{% endblock %}
+
+{% block content %}
+<h1>Downline</h1>
+<h2>Parent User: {{ referrer.username }}</h2>
+
+<h3>Downline Tree View:</h3>
+<ul>
+    <li>{{ referrer.username }} ({{ referrer.placement }})</li>
+    <ul>
+        {% for user, depth in downline_users %}
+            {% if depth == 2 %}
+                <li>
+                    {{ user.username }} ({{ user.placement }}) - Generation {{ depth }}
+                    <ul>
+                        {% for child_user, child_depth in downline_users %}
+                            {% if child_depth == 3 and child_user.parent_id == user.id %}
+                                <li>
+                                    {{ child_user.username }} ({{ child_user.placement }}) - Generation {{ child_depth }}
+                                    <ul>
+                                        {% for grandchild_user, grandchild_depth in downline_users %}
+                                            {% if grandchild_depth == 4 and grandchild_user.parent_id == child_user.id %}
+                                                <li>
+                                                    {{ grandchild_user.username }} ({{ grandchild_user.placement }}) - Generation {{ grandchild_depth }}
+                                                    <ul>
+                                                        {% for great_grandchild_user, great_grandchild_depth in downline_users %}
+                                                            {% if great_grandchild_depth == 5 and great_grandchild_user.parent_id == grandchild_user.id %}
+                                                                <li>
+                                                                    {{ great_grandchild_user.username }} ({{ great_grandchild_user.placement }}) - Generation {{ great_grandchild_depth }}
+                                                                    <ul>
+                                                                        {% for great_great_grandchild_user, great_great_grandchild_depth in downline_users %}
+                                                                            {% if great_great_grandchild_depth == 6 and great_great_grandchild_user.parent_id == great_grandchild_user.id %}
+                                                                                <li>
+                                                                                    {{ great_great_grandchild_user.username }} ({{ great_great_grandchild_user.placement }}) - Generation {{ great_great_grandchild_depth }}
+                                                                                    <ul>
+                                                                                        {% for great_great_great_grandchild_user, great_great_great_grandchild_depth in downline_users %}
+                                                                                            {% if great_great_great_grandchild_depth == 7 and great_great_great_grandchild_user.parent_id == great_great_grandchild_user.id %}
+                                                                                                <li>
+                                                                                                    {{ great_great_great_grandchild_user.username }} ({{ great_great_great_grandchild_user.placement }}) - Generation {{ great_great_great_grandchild_depth }}
+                                                                                                    <ul>
+                                                                                                        {% for great_great_great_great_grandchild_user, great_great_great_great_grandchild_depth in downline_users %}
+                                                                                                            {% if great_great_great_great_grandchild_depth == 8 and great_great_great_great_grandchild_user.parent_id == great_great_great_grandchild_user.id %}
+                                                                                                                <li>
+                                                                                                                    {{ great_great_great_great_grandchild_user.username }} ({{ great_great_great_great_grandchild_user.placement }}) - Generation {{ great_great_great_great_grandchild_depth }}
+                                                                                                                </li>
+                                                                                                            {% endif %}
+                                                                                                        {% endfor %}
+                                                                                                    </ul>
+                                                                                                </li>
+                                                                                            {% endif %}
+                                                                                        {% endfor %}
+                                                                                    </ul>
+                                                                                </li>
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    </ul>
+                                                                </li>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </ul>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</ul>
+{% endblock %}

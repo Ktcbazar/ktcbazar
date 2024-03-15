@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-breadcrumb mb-25">
+    <h2>Withdrwal</h2>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="panel">
+            <div class="panel-header">
+                <h5>Details on Table</h5>
+                <div class="btn-box d-flex gap-2">
+                    <div id="tableSearch"></div>
+                    <button class="btn btn-sm btn-icon btn-outline-primary" title="Download Excel" id="downloadExcel"><i class="fa fa-file" aria-hidden="true"></i></button>
+                    <div class="btn-box">
+                        <a href="{% url 'withdrawal_create' %}" class="btn btn-sm btn-primary"><i class="fa-light fa-plus"></i> Add New</a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-dashed table-hover digi-dataTable all-product-table table-striped" id="allProductTable">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Account</th>
+                            <th>Number</th>
+                            <th>Amount</th>
+                            <th>Withdrawal Date</th>
+                            <th>Note</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for withdrawal in withdrawals %}
+                            <tr>
+                                <td>{{ withdrawal.method }}</td>
+                                <td>{{ withdrawal.account }}</td>
+                                <td>{{ withdrawal.number }}</td>
+                                <td>{{ withdrawal.amount }}</td>
+                                <td>{{ withdrawal.withdrawal_date }}</td>
+                                <td>{{ withdrawal.note|default:"N/A" }}</td>
+                                <td>{{ withdrawal.get_status_display }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="table-bottom-control"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

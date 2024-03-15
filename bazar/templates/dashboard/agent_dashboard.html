@@ -1,0 +1,19 @@
+<!-- templates/dashboard.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+        <div class="dashboard-breadcrumb mb-25">
+            <h2>Agent Dashboard</h2>
+        </div>
+
+        {% if user.referral_link %}
+        <p>Your referral link: <a href="{{ user.referral_link }}">{{ user.referral_link }}</a></p>
+        {% else %}
+            <p>You don't have a referral link yet. <a href="{% url 'register' %}">Register now</a> to get one!</p>
+        {% endif %}
+
+       
+
+
+{% endblock %}
